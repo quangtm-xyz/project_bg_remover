@@ -9,11 +9,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 4000
-      - key: RAPIDAPI_KEY
-        sync: false
-      - key: RAPIDAPI_HOST
-        value: background-removal3.p.rapidapi.com
+      - key: REMOVEBG_API_KEY
+        value: x1qW6tB1HhvQ9J4Z8uiojec1
       - key: FRONTEND_URL
         sync: false
