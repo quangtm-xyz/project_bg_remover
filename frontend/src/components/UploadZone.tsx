@@ -44,7 +44,7 @@ export default function UploadZone({
       const resultUrl = URL.createObjectURL(resultBlob);
       setProcessedImage(resultUrl);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to remove background. Please try again.');
+      setError(err.response?.data?.error || 'Failed to remove background. Your image may not have a background or is too complex. Please upload an image that is suitable for removing background.');
       setOriginalImage('');
     } finally {
       setIsProcessing(false);
