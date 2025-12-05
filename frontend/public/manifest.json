@@ -2,8 +2,8 @@
   "name": "CleanBG – Free AI Background Remover",
   "short_name": "CleanBG",
   "icons": [
-    { "src": "/favicon.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/favicon.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "/favicon.jpg", "sizes": "192x192", "type": "image/jpeg" },
+    { "src": "/favicon.jpg", "sizes": "512x512", "type": "image/jpeg" }
   ],
   "start_url": "/",
   "display": "standalone",
