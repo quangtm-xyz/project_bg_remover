@@ -6,6 +6,12 @@ export default function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Set initial dir attribute
+  useEffect(() => {
+    document.documentElement.lang = language;
+    document.documentElement.dir = languages[language].dir as 'ltr' | 'rtl';
+  }, [language]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -20,8 +26,6 @@ export default function LanguageSwitcher() {
   const handleLanguageChange = (lang: Language) => {
     setLanguage(lang);
     setIsOpen(false);
-    document.documentElement.lang = lang;
-    document.documentElement.dir = languages[lang].dir as 'ltr' | 'rtl';
   };
 
   return (
@@ -43,15 +47,17 @@ export default function LanguageSwitcher() {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
+        <div className={`absolute top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50 ${
+          languages[language].dir === 'rtl' ? 'left-0' : 'right-0'
+        }`}>
           {(Object.keys(languages) as Language[]).map((lang) => (
             <button
               key={lang}
               onClick={() => handleLanguageChange(lang)}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 ${
+              className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 ${
                 language === lang ? 'bg-blue-50 dark:bg-blue-900/20' : ''
-              }`}
-              style={{ direction: languages[lang].dir as 'ltr' | 'rtl' }}
+              } ${languages[lang].dir === 'rtl' ? 'text-right' : 'text-left'}`}
+              dir={languages[lang].dir}
             >
               <span className="text-2xl">{languages[lang].flag}</span>
               <span className={`text-sm font-medium ${language === lang ? 'text-primary' : 'text-gray-700 dark:text-gray-300'}`}>
