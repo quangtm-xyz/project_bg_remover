@@ -1,62 +1,28 @@
 import { useState } from 'react'
-
-const faqData = [
-  {
-    q: "How to remove background from images?",
-    a: "Just drag & drop or click to upload your image. AI will remove background in seconds."
-  },
-  {
-    q: "What is this background remover?",
-    a: "An AI-powered tool that automatically removes background from images in one click."
-  },
-  {
-    q: "Is this tool completely free?",
-    a: "Yes! Unlimited usage, no signup, no watermark on preview."
-  },
-  {
-    q: "Can I download in HD quality?",
-    a: "Yes, click \"Download Image\" to get full HD PNG with transparent background."
-  },
-  {
-    q: "How to process bulk images?",
-    a: "Currently one by one, but we're working on batch processing."
-  },
-  {
-    q: "Does it support 4K / Ultra HD photos?",
-    a: "Yes, up to 25 megapixels."
-  },
-  {
-    q: "Why is this one of the best background removers?",
-    a: "Powered by remove.bg technology – the industry leader with perfect hair & edge detection."
-  },
-  {
-    q: "Can I use it on mobile?",
-    a: "Yes, fully responsive on phone and tablet."
-  },
-  {
-    q: "Which images work best?",
-    a: "Clear subject with defined edges (people, products, cars, animals)."
-  },
-  {
-    q: "Which images may not work well?",
-    a: "Blurry edges, very complex hair, or subject color too similar to background."
-  },
-  {
-    q: "What if the result is not perfect?",
-    a: "Try another photo or zoom in to check details."
-  },
-  {
-    q: "Why does transparent background show black in some editors?",
-    a: "Some apps (like Canva) don't support transparency preview. Use Photoshop, Figma, or download and test."
-  }
-]
+import { useTranslation } from '../lib/i18n'
 
 function FAQ() {
+  const { t } = useTranslation()
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   const toggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index)
   }
+
+  const faqData = [
+    { q: t('faq.q1'), a: t('faq.a1') },
+    { q: t('faq.q2'), a: t('faq.a2') },
+    { q: t('faq.q3'), a: t('faq.a3') },
+    { q: t('faq.q4'), a: t('faq.a4') },
+    { q: t('faq.q5'), a: t('faq.a5') },
+    { q: t('faq.q6'), a: t('faq.a6') },
+    { q: t('faq.q7'), a: t('faq.a7') },
+    { q: t('faq.q8'), a: t('faq.a8') },
+    { q: t('faq.q9'), a: t('faq.a9') },
+    { q: t('faq.q10'), a: t('faq.a10') },
+    { q: t('faq.q11'), a: t('faq.a11') },
+    { q: t('faq.q12'), a: t('faq.a12') },
+  ]
 
   const faqSchema = JSON.stringify({
     "@context": "https://schema.org",
@@ -75,7 +41,7 @@ function FAQ() {
     <section className="py-16 px-4">
       <div className="max-w-3xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-10">
-          Frequently Asked Questions
+          {t('faq.title')}
         </h2>
         <div className="space-y-3">
           {faqData.map((item, index) => (

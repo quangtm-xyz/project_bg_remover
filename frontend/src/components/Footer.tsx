@@ -1,4 +1,8 @@
+import { useTranslation } from '../lib/i18n';
+
 function Footer() {
+  const { t } = useTranslation();
+  
   return (
     <footer className="bg-[#0f0f0f] text-[#f5f5f5] pt-12 pb-6">
       <div className="max-w-7xl mx-auto px-4">
@@ -9,37 +13,37 @@ function Footer() {
               <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">B</span>
               </div>
-              <span className="text-xl font-bold">Background Remover</span>
+              <span className="text-xl font-bold">{t('header.title')}</span>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
-              AI-powered background removal tool. Fast, free, and incredibly accurate. Remove backgrounds from any image in seconds.
+              {t('footer.description')}
             </p>
           </div>
 
           {/* Column 2: Features */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Features</h3>
+            <h3 className="font-semibold text-lg mb-4">{t('footer.features')}</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li className="hover:text-white transition-colors duration-200 cursor-pointer">AI Background Removal</li>
-              <li className="hover:text-white transition-colors duration-200 cursor-pointer">HD Quality Download</li>
-              <li className="hover:text-white transition-colors duration-200 cursor-pointer">Transparent PNG Export</li>
-              <li className="hover:text-white transition-colors duration-200 cursor-pointer">Mobile Friendly</li>
+              <li className="hover:text-white transition-colors duration-200 cursor-pointer">{t('footer.feature1')}</li>
+              <li className="hover:text-white transition-colors duration-200 cursor-pointer">{t('footer.feature2')}</li>
+              <li className="hover:text-white transition-colors duration-200 cursor-pointer">{t('footer.feature3')}</li>
+              <li className="hover:text-white transition-colors duration-200 cursor-pointer">{t('footer.feature4')}</li>
             </ul>
           </div>
 
           {/* Column 3: Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Links</h3>
+            <h3 className="font-semibold text-lg mb-4">{t('footer.links')}</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li className="hover:text-white transition-colors duration-200 cursor-pointer">FAQ</li>
-              <li className="hover:text-white transition-colors duration-200 cursor-pointer">Privacy Policy</li>
-              <li className="hover:text-white transition-colors duration-200 cursor-pointer">Terms of Service</li>
+              <li className="hover:text-white transition-colors duration-200 cursor-pointer">{t('footer.link1')}</li>
+              <li className="hover:text-white transition-colors duration-200 cursor-pointer">{t('footer.link2')}</li>
+              <li className="hover:text-white transition-colors duration-200 cursor-pointer">{t('footer.link3')}</li>
             </ul>
           </div>
 
           {/* Column 4: Social */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Follow Us</h3>
+            <h3 className="font-semibold text-lg mb-4">{t('footer.social')}</h3>
             <div className="flex gap-4">
               <a
                 href="#"
@@ -65,7 +69,7 @@ function Footer() {
 
         {/* Bottom */}
         <div className="border-t border-gray-800 pt-6 text-center text-sm text-gray-500">
-          <p>© 2025 Background Remover. Made with ❤️ and AI.</p>
+          <p>{t('footer.copyright')}</p>
         </div>
       </div>
     </footer>

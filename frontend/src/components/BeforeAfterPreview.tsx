@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from '../lib/i18n';
 
 interface BeforeAfterPreviewProps {
   originalImage: string;
@@ -6,6 +7,7 @@ interface BeforeAfterPreviewProps {
 }
 
 export default function BeforeAfterPreview({ originalImage, processedImage }: BeforeAfterPreviewProps) {
+  const { t } = useTranslation();
   const [showOriginal, setShowOriginal] = useState(false);
 
   return (
@@ -19,7 +21,7 @@ export default function BeforeAfterPreview({ originalImage, processedImage }: Be
               : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
           }`}
         >
-          After
+          {t('preview.after')}
         </button>
         <button
           onClick={() => setShowOriginal(true)}
@@ -29,7 +31,7 @@ export default function BeforeAfterPreview({ originalImage, processedImage }: Be
               : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
           }`}
         >
-          Before
+          {t('preview.before')}
         </button>
       </div>
 

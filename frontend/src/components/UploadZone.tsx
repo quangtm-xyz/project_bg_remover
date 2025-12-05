@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { removeBackground } from '../lib/api';
+import { useTranslation } from '../lib/i18n';
 
 interface UploadZoneProps {
   setOriginalImage: (image: string) => void;
@@ -14,6 +15,7 @@ export default function UploadZone({
   setIsProcessing,
   setError 
 }: UploadZoneProps) {
+  const { t } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -107,10 +109,10 @@ export default function UploadZone({
         
         <div>
           <p className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-            Drop your image here
+            {t('upload.drop')}
           </p>
           <p className="text-gray-600 dark:text-gray-400">
-            or click to browse
+            {t('upload.browse')}
           </p>
         </div>
         
