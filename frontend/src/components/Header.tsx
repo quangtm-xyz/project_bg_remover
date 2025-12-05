@@ -12,12 +12,9 @@ export default function Header() {
           <LanguageSwitcher />
         </div>
         <div className="text-center">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <img src="/favicon.png" alt="CleanBG Logo" className="h-8 w-8 md:h-10 md:w-10" />
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
-              {t('header.title')}
-            </h1>
-          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-2">
+            {t('header.title')}
+          </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400">
             {t('header.subtitle')}
           </p>
