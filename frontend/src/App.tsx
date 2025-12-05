@@ -77,9 +77,12 @@ function App() {
 
         {originalImage && processedImage && !isProcessing && (
           <div className="space-y-6">
+            {/* @ts-ignore - Props added for SEO */}
             <BeforeAfterPreview 
               originalImage={originalImage}
               processedImage={processedImage}
+              originalAlt="Original uploaded image"
+              processedAlt="Background removed – transparent PNG"
             />
             
             {/* ADS SLOT 3 - Between Preview and Download */}

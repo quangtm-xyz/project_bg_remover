@@ -58,6 +58,19 @@ function FAQ() {
     setOpenIndex(openIndex === index ? null : index)
   }
 
+  const faqSchema = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqData.map(item => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.a
+      }
+    }))
+  })
+
   return (
     <section className="py-16 px-4">
       <div className="max-w-3xl mx-auto">
@@ -101,6 +114,7 @@ function FAQ() {
             </div>
           ))}
         </div>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqSchema }} />
       </div>
     </section>
   )
