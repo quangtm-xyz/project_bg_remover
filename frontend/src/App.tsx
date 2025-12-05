@@ -5,6 +5,9 @@ import UploadZone from './components/UploadZone'
 import ProcessingSpinner from './components/ProcessingSpinner'
 import BeforeAfterPreview from './components/BeforeAfterPreview'
 import DownloadButton from './components/DownloadButton'
+import About from './components/About'
+import FAQ from './components/FAQ'
+import Footer from './components/Footer'
 
 function App() {
   const [isDark, setIsDark] = useState(false)
@@ -120,13 +123,12 @@ function App() {
             <p className="text-gray-600 dark:text-gray-400">No watermarks, no sign-up required</p>
           </div>
         </div>
+
+        <About />
+        <FAQ />
       </main>
 
-      <footer className="mt-16 py-8 border-t border-gray-200 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 text-center text-gray-600 dark:text-gray-400">
-          <p>&copy; 2024 Background Remover. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
