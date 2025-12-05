@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useTranslation } from '../lib/i18n'
+import { useTranslation } from '../lib/i18n.tsx'
 
 function FAQ() {
   const { t } = useTranslation()

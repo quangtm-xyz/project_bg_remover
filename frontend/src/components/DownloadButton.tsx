@@ -1,4 +1,4 @@
-import { useTranslation } from '../lib/i18n';
+import { useTranslation } from '../lib/i18n.tsx';
 
 interface DownloadButtonProps {
   processedImage: string;

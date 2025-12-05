@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { I18nProvider, useTranslation } from './lib/i18n'
+import { I18nProvider, useTranslation } from './lib/i18n.tsx'
 import Header from './components/Header'
 import ThemeToggle from './components/ThemeToggle'
 import UploadZone from './components/UploadZone'
@@ -79,12 +79,9 @@ function AppContent() {
 
         {originalImage && processedImage && !isProcessing && (
           <div className="space-y-6">
-            {/* @ts-ignore - Props added for SEO */}
             <BeforeAfterPreview 
               originalImage={originalImage}
               processedImage={processedImage}
-              originalAlt="Original uploaded image"
-              processedAlt="Background removed – transparent PNG"
             />
             
             {/* ADS SLOT 3 - Between Preview and Download */}
