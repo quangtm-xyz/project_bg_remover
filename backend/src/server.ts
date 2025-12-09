@@ -20,6 +20,8 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'http://localhost:3000',
+    'https://www.craftbg.click',
+    'https://craftbg.click',
     process.env.FRONTEND_URL || '',
     /\.vercel\.app$/,
   ].filter(Boolean),
@@ -97,7 +99,7 @@ app.post('/api/remove-bg', upload.single('file'), async (req: Request, res: Resp
 
   } catch (error: any) {
     console.error('Remove.bg error:', error.message);
-    
+
     if (error.response) {
       console.error('Status:', error.response.status);
       console.error('Data:', error.response.data?.toString());
@@ -106,10 +108,10 @@ app.post('/api/remove-bg', upload.single('file'), async (req: Request, res: Resp
         details: error.response.data?.toString() || error.message
       });
     }
-    
-    res.status(500).json({ 
+
+    res.status(500).json({
       error: 'Internal server error',
-      message: error.message 
+      message: error.message
     });
   }
 });
@@ -122,8 +124,8 @@ app.use((req: Request, res: Response) => {
 // Error handler
 app.use((err: any, req: Request, res: Response, next: any) => {
   console.error('Error:', err);
-  res.status(500).json({ 
-    error: err.message || 'Internal server error' 
+  res.status(500).json({
+    error: err.message || 'Internal server error'
   });
 });
 
