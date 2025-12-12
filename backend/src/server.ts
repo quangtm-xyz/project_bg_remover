@@ -74,6 +74,7 @@ app.post('/api/remove-bg', upload.single('file'), async (req: Request, res: Resp
     }
 
     const CRAFTBG_API_URL = process.env.CRAFTBG_API_URL || 'https://craftbg-removebg-api.onrender.com';
+    const CRAFTBG_API_KEY = process.env.CRAFTBG_API_KEY || 'craftbg_test_2025_super_secret';
 
     console.log('📤 Processing image:', {
       filename: req.file.originalname,
@@ -94,11 +95,12 @@ app.post('/api/remove-bg', upload.single('file'), async (req: Request, res: Resp
 
     // Call custom CraftBG API
     const response = await axios.post(
-      `${CRAFTBG_API_URL}/remove-background`,
+      `${CRAFTBG_API_URL}/api/remove-background`,
       formData,
       {
         headers: {
           ...formData.getHeaders(),
+          'x-api-key': CRAFTBG_API_KEY
         },
         responseType: 'arraybuffer',
         timeout: 60000,
