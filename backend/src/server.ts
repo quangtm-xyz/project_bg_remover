@@ -4,8 +4,8 @@ import helmet from 'helmet';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import multer from 'multer';
+import Replicate from 'replicate';
 import axios from 'axios';
-import FormData from 'form-data';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -73,52 +73,54 @@ app.post('/api/remove-bg', upload.single('file'), async (req: Request, res: Resp
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    const CRAFTBG_API_URL = process.env.CRAFTBG_API_URL || 'https://craftbg-removebg-api.onrender.com';
-    const CRAFTBG_API_KEY = process.env.CRAFTBG_API_KEY || 'craftbg_test_2025_super_secret';
+    const REPLICATE_API_TOKEN = process.env.REPLICATE_API_TOKEN;
+
+    if (!REPLICATE_API_TOKEN) {
+      console.error('❌ REPLICATE_API_TOKEN not set');
+      return res.status(500).json({ error: 'API configuration error' });
+    }
 
     console.log('📤 Processing image:', {
       filename: req.file.originalname,
       size: `${(req.file.size / 1024).toFixed(2)} KB`,
       mimetype: req.file.mimetype,
-      apiUrl: CRAFTBG_API_URL,
       timestamp: new Date().toISOString()
     });
 
-    // Create form data for custom API
-    const formData = new FormData();
-    formData.append('image', req.file.buffer, {
-      filename: req.file.originalname,
-      contentType: req.file.mimetype
+    // Convert buffer to base64 for Replicate
+    const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+
+    console.log('🔄 Calling Replicate API...');
+
+    // Call Replicate API
+    const replicate = new Replicate({
+      auth: REPLICATE_API_TOKEN,
     });
 
-    console.log('🔄 Calling CraftBG API...');
-
-    // Call custom CraftBG API
-    const response = await axios.post<{ image: string; cached: boolean }>(
-      `${CRAFTBG_API_URL}/api/remove-background`,
-      formData,
+    const output = await replicate.run(
+      "cjwbw/rembg:fb8af171cfa1616ddcf1242c093f9c46bcada5ad4cf6f2fbe8b81b330ec5c003",
       {
-        headers: {
-          ...formData.getHeaders(),
-          'x-api-key': CRAFTBG_API_KEY
-        },
-        timeout: 60000,
-        maxBodyLength: Infinity,
-        maxContentLength: Infinity
+        input: {
+          image: base64Image
+        }
       }
     );
 
-    const processingTime = Date.now() - startTime;
-    console.log(`✅ Success! Processing time: ${processingTime}ms, Cached: ${response.data.cached}`);
+    // Replicate returns a URL string
+    const outputUrl = output as unknown as string;
 
-    // Convert base64 to buffer
-    const base64Data = response.data.image.replace(/^data:image\/\w+;base64,/, '');
-    const imageBuffer = Buffer.from(base64Data, 'base64');
+    const processingTime = Date.now() - startTime;
+    console.log(`✅ Success! Processing time: ${processingTime}ms`);
+
+    // Download result from Replicate URL
+    const imageResponse = await axios.get(outputUrl, {
+      responseType: 'arraybuffer'
+    });
 
     // Return PNG image
     res.set('Content-Type', 'image/png');
     res.set('Content-Disposition', `attachment; filename="removed-bg-${Date.now()}.png"`);
-    res.send(imageBuffer);
+    res.send(Buffer.from(imageResponse.data));
 
   } catch (error: any) {
     const processingTime = Date.now() - startTime;
