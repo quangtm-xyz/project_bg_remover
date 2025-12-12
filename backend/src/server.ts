@@ -63,7 +63,7 @@ app.get('/', (req: Request, res: Response) => {
   res.json({ status: 'OK' });
 });
 
-// Background removal endpoint - remove.bg API
+// Background removal endpoint - Custom CraftBG API
 app.post('/api/remove-bg', upload.single('file'), async (req: Request, res: Response) => {
   const startTime = Date.now();
 
@@ -73,37 +73,35 @@ app.post('/api/remove-bg', upload.single('file'), async (req: Request, res: Resp
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    const REMOVEBG_API_KEY = process.env.REMOVEBG_API_KEY || 'x1qW6tB1HhvQ9J4Z8uiojec1';
+    const CRAFTBG_API_URL = process.env.CRAFTBG_API_URL || 'https://craftbg-removebg-api.onrender.com';
 
     console.log('📤 Processing image:', {
       filename: req.file.originalname,
       size: `${(req.file.size / 1024).toFixed(2)} KB`,
       mimetype: req.file.mimetype,
-      apiKeyLength: REMOVEBG_API_KEY.length,
+      apiUrl: CRAFTBG_API_URL,
       timestamp: new Date().toISOString()
     });
 
-    // Create form data
+    // Create form data for custom API
     const formData = new FormData();
-    formData.append('image_file', req.file.buffer, {
+    formData.append('image', req.file.buffer, {
       filename: req.file.originalname,
       contentType: req.file.mimetype
     });
-    formData.append('size', 'auto');
 
-    console.log('🔄 Calling remove.bg API...');
+    console.log('🔄 Calling CraftBG API...');
 
-    // Call remove.bg API
+    // Call custom CraftBG API
     const response = await axios.post(
-      'https://api.remove.bg/v1.0/removebg',
+      `${CRAFTBG_API_URL}/remove-background`,
       formData,
       {
         headers: {
           ...formData.getHeaders(),
-          'X-Api-Key': REMOVEBG_API_KEY
         },
         responseType: 'arraybuffer',
-        timeout: 30000,
+        timeout: 60000,
         maxBodyLength: Infinity,
         maxContentLength: Infinity
       }
@@ -111,14 +109,6 @@ app.post('/api/remove-bg', upload.single('file'), async (req: Request, res: Resp
 
     const processingTime = Date.now() - startTime;
     console.log(`✅ Success! Processing time: ${processingTime}ms`);
-
-    // Check API credits from response headers
-    if (response.headers['x-credits-charged']) {
-      console.log('💳 Credits charged:', response.headers['x-credits-charged']);
-    }
-    if (response.headers['x-ratelimit-remaining']) {
-      console.log('📊 Rate limit remaining:', response.headers['x-ratelimit-remaining']);
-    }
 
     // Return PNG image
     res.set('Content-Type', 'image/png');
@@ -145,14 +135,12 @@ app.post('/api/remove-bg', upload.single('file'), async (req: Request, res: Resp
 
       if (status === 400) {
         errorMessage = 'Invalid image format or corrupted file';
-      } else if (status === 402) {
-        errorMessage = 'API quota exceeded. Please try again later';
-        console.error('💰 QUOTA EXCEEDED - Need to check remove.bg account');
-      } else if (status === 403) {
-        errorMessage = 'Invalid API key';
-        console.error('🔑 INVALID API KEY - Check REMOVEBG_API_KEY env variable');
-      } else if (status === 429) {
-        errorMessage = 'Rate limit exceeded. Please try again in a few minutes';
+      } else if (status === 500) {
+        errorMessage = 'AI processing error. Please try again';
+        console.error('🤖 AI API ERROR - Check craftbg-removebg-api logs');
+      } else if (status === 503) {
+        errorMessage = 'Service temporarily unavailable. Please try again in a moment';
+        console.error('⚠️ SERVICE UNAVAILABLE - API may be starting up');
       }
 
       return res.status(status).json({
@@ -162,10 +150,18 @@ app.post('/api/remove-bg', upload.single('file'), async (req: Request, res: Resp
     }
 
     if (error.code === 'ECONNABORTED') {
-      console.error('⏱️ Request timeout after 30s');
+      console.error('⏱️ Request timeout after 60s');
       return res.status(504).json({
         error: 'Request timeout',
-        message: 'The image processing took too long. Please try with a smaller image.'
+        message: 'The AI processing took too long. Please try with a smaller image.'
+      });
+    }
+
+    if (error.code === 'ECONNREFUSED') {
+      console.error('🔌 CONNECTION REFUSED - CraftBG API may be down');
+      return res.status(503).json({
+        error: 'Service unavailable',
+        message: 'Unable to connect to background removal service. Please try again later.'
       });
     }
 
