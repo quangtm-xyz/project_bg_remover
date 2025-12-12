@@ -94,7 +94,7 @@ app.post('/api/remove-bg', upload.single('file'), async (req: Request, res: Resp
     console.log('🔄 Calling CraftBG API...');
 
     // Call custom CraftBG API
-    const response = await axios.post(
+    const response = await axios.post<{ image: string; cached: boolean }>(
       `${CRAFTBG_API_URL}/api/remove-background`,
       formData,
       {
@@ -102,7 +102,6 @@ app.post('/api/remove-bg', upload.single('file'), async (req: Request, res: Resp
           ...formData.getHeaders(),
           'x-api-key': CRAFTBG_API_KEY
         },
-        responseType: 'arraybuffer',
         timeout: 60000,
         maxBodyLength: Infinity,
         maxContentLength: Infinity
@@ -110,12 +109,16 @@ app.post('/api/remove-bg', upload.single('file'), async (req: Request, res: Resp
     );
 
     const processingTime = Date.now() - startTime;
-    console.log(`✅ Success! Processing time: ${processingTime}ms`);
+    console.log(`✅ Success! Processing time: ${processingTime}ms, Cached: ${response.data.cached}`);
+
+    // Convert base64 to buffer
+    const base64Data = response.data.image.replace(/^data:image\/\w+;base64,/, '');
+    const imageBuffer = Buffer.from(base64Data, 'base64');
 
     // Return PNG image
     res.set('Content-Type', 'image/png');
     res.set('Content-Disposition', `attachment; filename="removed-bg-${Date.now()}.png"`);
-    res.send(Buffer.from(response.data));
+    res.send(imageBuffer);
 
   } catch (error: any) {
     const processingTime = Date.now() - startTime;
